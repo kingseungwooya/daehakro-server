@@ -8,7 +8,7 @@ import project.cnu.daehakro.domain.entity.Member;
 @Service
 public interface ChatService {
 
-    ChatRoomDto roomDetail(Member member, Long roomId);
+    ChatRoomDto roomDetail(String memberId, Long roomId);
 
     ChatRoomDto sendMessage(ChatRequestDto message);
 }
