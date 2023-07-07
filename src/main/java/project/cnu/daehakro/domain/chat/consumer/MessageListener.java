@@ -28,6 +28,7 @@ public class MessageListener {
     @KafkaListener(
             topics = "${spring.kafka.topic.name}",
             groupId = "chat-group-${T(java.util.UUID).randomUUID()}" // 여러개의 채팅방을 고려해 랜덤으로 생성한다.
+            // 문제점 메시지가 들어오때마다 계속 랜덤 생성,,, 무슨 방법 없을까..
     )
     public void listen(ChatMessageDto message,
                        @Header(KafkaHeaders.GROUP_ID) String groupId) {
