@@ -17,16 +17,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         /*
          * setApplicationDestinationPrefixes
          * 도착 경로에 대한 prefix를 설정
-         * /app : /topic/chat 이라는 구독을 신청했을 때 실제 경로는 /chat-socket/topic/chat
+         * /app : /topic/chat 이라는 구독을 신청했을 때 실제 경로는 /app/topic/chat
          */
-        config.setApplicationDestinationPrefixes("/chat-socket");
+        config.setApplicationDestinationPrefixes("/app");
         /*
          * enableSimpleBroker
          * 메시지 브로커 등록
          * 네이밍 : 보통 broadcast는 /topic, 특정 유저에게 보내는 것은 /queue
          * ver1에선 Queue 다중 채팅은 topic 으로 바꿔야한다.
          */
-        config.enableSimpleBroker("/queue");
+        config.enableSimpleBroker("/topic/");
         /*
          * setUserDestinationPrefix
          * 특정 유저에게 보낼 때(convertAndSendToUser) prefix
@@ -40,7 +40,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         /*
          * socket 연결 엔드포인트
          */
-        registry.addEndpoint("/ws")
+        registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
