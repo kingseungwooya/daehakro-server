@@ -23,11 +23,18 @@ public class ChatMessageDto {
 
     private String sender;
 
+    private Long roomId;
+
     public ChatMessageDto(ChatMessage chat){
         this.messageId = chat.getMessageId();
         this.messageType = chat.getMessageType();
         this.content = chat.getContent();
         this.createAt = chat.getCreateAt();
         this.sender = chat.getMember().getMemberName();
+        this.roomId = chat.getChatRoom().getRoomId();
+    }
+
+    public void setCreateAt(Timestamp createAt) {
+        this.createAt = createAt;
     }
 }
