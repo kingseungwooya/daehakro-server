@@ -19,6 +19,7 @@ public class KafkaConfig {
     @Bean
     public NewTopic daehakRoTopic(){
         return TopicBuilder.name(topicName)
+                .partitions(5)
                 .build();
     }
 

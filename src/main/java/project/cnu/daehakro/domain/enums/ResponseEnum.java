@@ -31,7 +31,11 @@ public enum ResponseEnum {
 
     CHAT_ROOM_DETAIL_SUCCESS(200, "조회 성공"),
     CHAT_ROOM_NOT_EXIST(-1,"존재하지 않는 채팅방입니다"),
-    CHAT_ROOM_NOT_PERMISSION(-1,"접근할 수 없는 채팅방입니다");
+    CHAT_ROOM_NOT_PERMISSION(-1,"접근할 수 없는 채팅방입니다"),
+
+    KAFKA_CONSUME_ERR(500, "메시지를 불러오는과정에서 실패하였습니다."),
+    KAFKA_PARTITION_KEY_ERR(-1, "Partition에 KEY(RoomId)를 넣어줘야합니다."),
+    KAFKA_PARTITION_KEY_TYPE_ERR(-1, "Partition 에 KEY(RoomId)는 Integer 형식이어야 합니다.");
 
 
     private final int code;
