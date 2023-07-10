@@ -1,5 +1,6 @@
 package project.cnu.daehakro.domain.chat.service;
 
+import project.cnu.daehakro.domain.chat.dto.ChatMessageDto;
 import project.cnu.daehakro.domain.chat.dto.ChatRequestDto;
 import project.cnu.daehakro.domain.chat.dto.ChatRoomDto;
 import project.cnu.daehakro.domain.chat.repository.ChatMessageRepository;
@@ -50,7 +51,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatRoomDto sendMessage(ChatRequestDto message) {
+    public ChatRoomDto sendMessage(ChatMessageDto message) {
         Member member = memberRepository.findById(message.getMemberId())
                 .orElseThrow(
                         () -> new CustomApiException(ResponseEnum.USER_NOT_FOUND)

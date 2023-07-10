@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import project.cnu.daehakro.domain.chat.dto.ChatMessageDto;
 import project.cnu.daehakro.domain.chat.dto.ChatRequestDto;
 import project.cnu.daehakro.domain.chat.dto.ChatRoomDto;
 import project.cnu.daehakro.domain.chat.dto.MemberDto;
@@ -38,7 +39,7 @@ public class SimphatController {
     // 프론트에서 첫 채팅메시지를 받을 때 방이 없다면 그 때 http 요청을 해서 방을 받아오는 도중 두번째메시지가 온다면 꼬일위험 many! => room 리턴
     @MessageMapping("/chat.send") // 요청 엔드포인트 /app/chat.send
     // @SendTo("/queue/pub") // 이건 pub/ sub구조를 쓸떈 안쓴다 SimpMessaging Temp 에서만 씀
-    public void sendMessage(@Payload ChatRequestDto message) {
+    public void sendMessage(@Payload ChatMessageDto message) {
         /*
          * 특정 유저에게만 보내기!
          * 구독할 때는 /user/topic/pub

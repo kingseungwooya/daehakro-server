@@ -15,7 +15,7 @@ public class ChatMessageDto {
 
     private Long messageId;
 
-    private ChatMessageType messageType;
+ //   private ChatMessageType messageType;
 
     private String content;
 
@@ -23,15 +23,18 @@ public class ChatMessageDto {
 
     private String sender;
 
+    private String memberId;
+
     private Long roomId;
 
     public ChatMessageDto(ChatMessage chat){
         this.messageId = chat.getMessageId();
-        this.messageType = chat.getMessageType();
+      //  this.messageType = chat.getMessageType();
         this.content = chat.getContent();
         this.createAt = chat.getCreateAt();
         this.sender = chat.getMember().getMemberName();
         this.roomId = chat.getChatRoom().getRoomId();
+        this.memberId = chat.getMember().getMemberId();
     }
 
     public void setCreateAt(Timestamp createAt) {
