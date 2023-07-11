@@ -22,9 +22,9 @@ public class ChatMessage {
     @Column(name = "message_id")
     private Long messageId;
 
-    @Column(name = "message_type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ChatMessageType messageType;
+    // @Column(name = "message_type", nullable = false)
+    // @Enumerated(EnumType.STRING)
+    // private ChatMessageType messageType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")

@@ -31,4 +31,10 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "univ_id")
+    private UnivInfo univInfo;
+
 }
