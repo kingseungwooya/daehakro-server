@@ -38,8 +38,13 @@ public class KafkaProducer {
     public void sendMessage(ChatMessageDto message) {
         LOGGER.info(String.format("Message sent %s", message.getMemberId()));
         //   kafkaTemplate.send(topicName, message);
-        ListenableFuture<SendResult<String, ChatMessageDto>> future = kafkaTemplate.send(topicName, message);// 메시지를 kafka broker 에게 전송한다 . step1
+        // ListenableFuture<SendResult<String, ChatMessageDto>> future = kafkaTemplate.send(topicName, message);// 메시지를 kafka broker 에게 전송한다 . step1
         // 성공 유무 확인을 위한 콜백 메소드 구현
+        ListenableFuture<SendResult<String, ChatMessageDto>> future = kafkaTemplate.send(
+                new ProducerRecord<String, ChatMessageDto>(topicName, Long.toString(message.getRoomId()), message)  // custom partitioner 이용을 위한..
+        );
+);// 메시지를 kafka broker 에게 전송한다 . step1
+
         future.addCallback(success -> {
             LOGGER.info("[성공이닷] offset: {}, partition: {}",
                     success.getRecordMetadata().offset(), success.getRecordMetadata().partition());
