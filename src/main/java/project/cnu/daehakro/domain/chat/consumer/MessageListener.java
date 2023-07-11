@@ -6,16 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import project.cnu.daehakro.domain.chat.dto.ChatMessageDto;
-import project.cnu.daehakro.domain.chat.dto.ChatRequestDto;
 import project.cnu.daehakro.domain.chat.service.ChatService;
-import project.cnu.daehakro.domain.entity.ChatMessage;
 
-import java.sql.Timestamp;
 
 /**
  * Consumer

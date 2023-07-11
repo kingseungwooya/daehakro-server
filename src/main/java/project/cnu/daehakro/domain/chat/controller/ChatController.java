@@ -20,8 +20,6 @@ import project.cnu.daehakro.domain.common.ResponseDto;
 import project.cnu.daehakro.domain.enums.ResponseEnum;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @AllArgsConstructor
@@ -33,7 +31,7 @@ public class ChatController {
     private final ChatService chatService;
 
     @GetMapping("/room/{roomId}")
-    public ResponseEntity<?> roomDetail(String memberId, @PathVariable @NotNull Long roomId) {
+    public ResponseEntity<?> enterRoom(String memberId, @PathVariable @NotNull Long roomId) {
         ChatRoomDto roomDto = chatService.roomDetail(memberId, roomId);
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.CHAT_ROOM_DETAIL_SUCCESS, roomDto), HttpStatus.OK);
     }
@@ -41,7 +39,6 @@ public class ChatController {
     @PostMapping(value = "/send", consumes = "application/json", produces = "application/json")
     public void sendMessage(@RequestBody ChatMessageDto message) {
         message.setCreateAt(new Timestamp(System.currentTimeMillis()));
-        //Sending the message to kafka topic queue
         kafkaProducer.sendMessage(message);
     }
 

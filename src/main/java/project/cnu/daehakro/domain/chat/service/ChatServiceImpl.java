@@ -1,7 +1,7 @@
 package project.cnu.daehakro.domain.chat.service;
 
+
 import project.cnu.daehakro.domain.chat.dto.ChatMessageDto;
-import project.cnu.daehakro.domain.chat.dto.ChatRequestDto;
 import project.cnu.daehakro.domain.chat.dto.ChatRoomDto;
 import project.cnu.daehakro.domain.chat.repository.ChatMessageRepository;
 import project.cnu.daehakro.domain.chat.repository.ChatRoomRepository;
@@ -9,7 +9,9 @@ import project.cnu.daehakro.domain.chat.repository.MemberRepository;
 import project.cnu.daehakro.domain.entity.ChatMessage;
 import project.cnu.daehakro.domain.entity.ChatRoom;
 import project.cnu.daehakro.domain.entity.Member;
+
 import javax.transaction.Transactional;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.cnu.daehakro.domain.enums.ResponseEnum;

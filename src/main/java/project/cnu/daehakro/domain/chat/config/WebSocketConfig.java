@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
          * 도착 경로에 대한 prefix를 설정
          * /app : /topic/chat 이라는 구독을 신청했을 때 실제 경로는 /app/topic/chat
          */
-        config.setApplicationDestinationPrefixes("/app");
+        config.setApplicationDestinationPrefixes("/daehakro");
         /*
          * enableSimpleBroker
          * 메시지 브로커 등록

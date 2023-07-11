@@ -24,10 +24,10 @@ public class ChatRoom {
 
     private String title;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "chatRoom")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom")
     private List<Member> members;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "chatRoom")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom")
     private List<ChatMessage> messages;
 
     @CreationTimestamp
