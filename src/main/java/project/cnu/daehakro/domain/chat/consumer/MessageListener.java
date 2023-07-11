@@ -35,15 +35,16 @@ public class MessageListener {
             topics = "${spring.kafka.topic.name}"
     )
     public void listen(ChatMessageDto message) {
-        System.out.println("sending via kafka listener..");
+        logger.info("sending via kafka listener..");
 
-        System.out.println("Received message: " + message.getContent());
-        System.out.println("Sender id: " + message.getSender());
-        System.out.println("Chat room id: " + message.getRoomId());
-        System.out.println("Timestamp: " + message.getCreateAt());
+        logger.info("Received message: " + message.getContent());
+        logger.info("Sender id: " + message.getSender());
+        logger.info("Chat room id: " + message.getRoomId());
+        logger.info("Timestamp: " + message.getCreateAt());
         // listen 되자마자 디비로 바로 insert 박아주기
         // chatService.sendMessage(message);
 
+        // 추후 여러 학교로 확장시 학교마다 topic을 만드는게 좋을듯..
         template.convertAndSend("/topic/group/", message);
         /**
          * "/topic/group"는 메시지를 보낼 대상 주제(Topic)를 지정하는 부분
