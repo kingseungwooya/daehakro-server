@@ -13,6 +13,11 @@ public enum ResponseEnum {
     // AUTH_REFRESH_DOES_NOT_EXIST(401, "REFRESH_DOES_NOT_EXIST"),
     // AUTH_REFRESH_EXPIRED(401, "AUTH_REFRESH_EXPIRED"),
 
+    UNIV_NOT_EXIST(400, "요청하신 ID의 대학정보가 없습니다."),
+
+    EVENT_NOT_EXIST(400, "해당 event를 찾을 수 없습니다."),
+    EVENT_NOT_ENDED(403, "해당 event의 마감기한이 끝나지 않았습니다."),
+
     USER_USERNAME_CK_SUCCESS(200, "사용가능한 아이디입니다."),
     USER_USERNAME_CK_FAIL(500, "사융할 수 없는 아이디입니다."),
 
