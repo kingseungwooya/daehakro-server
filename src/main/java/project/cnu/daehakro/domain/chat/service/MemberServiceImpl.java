@@ -18,6 +18,14 @@ public class MemberServiceImpl implements MemberService {
     private final EventRepository eventRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 검증필요
+     * 인증된 사용자인가?
+     * 쿠폰을 사용하였는가?
+     * 결제를 하였는가?
+     * 신청기간이 지났는가?
+     */
+
     @Override
     public void applyEvent(MemberApplyForm applyForm) {
         Event event = eventRepository.findById(applyForm.getEventId()).orElseThrow(
