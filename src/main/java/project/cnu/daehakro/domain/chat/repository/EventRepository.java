@@ -1,0 +1,12 @@
+package project.cnu.daehakro.domain.chat.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import project.cnu.daehakro.domain.entity.Event;
+
+import java.util.List;
+
+@Repository
+public interface EventRepository extends JpaRepository<Event, Long> {
+    List<Event> findAllByOrderByCreateAtDesc();
+}
