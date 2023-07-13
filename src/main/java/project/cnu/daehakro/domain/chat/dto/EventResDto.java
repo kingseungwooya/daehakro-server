@@ -4,6 +4,7 @@ import lombok.*;
 import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 import project.cnu.daehakro.domain.entity.Event;
+import project.cnu.daehakro.domain.enums.EventType;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -32,8 +33,10 @@ public class EventResDto {
 
     private final boolean open;
 
+    private final String eventType;
+
     @Builder
-    public EventResDto(int eventId, String eventName, LocalDate startDate, LocalDate endDate, Timestamp createAt, int manApply, int womanApply, int maxApply, boolean open) {
+    public EventResDto(int eventId, String eventName, LocalDate startDate, LocalDate endDate, Timestamp createAt, int manApply, int womanApply, int maxApply, boolean open, EventType eventType) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.startDate = startDate;
@@ -43,17 +46,18 @@ public class EventResDto {
         this.womanApply = womanApply;
         this.maxApply = maxApply;
         this.open = open;
+        this.eventType = eventType.name();
     }
 
-    public EventResDto(Event event, int manApply, int womanApply) {
-        this.eventId = event.getEventId();
-        this.eventName = event.getEventName();
-        this.startDate = event.getStartDate();
-        this.endDate = event.getEndDate();
-        this.createAt = event.getCreateAt();
-        this.manApply = manApply;
-        this.womanApply = womanApply;
-        this.maxApply = event.getMaxApply();
-        this.open = event.isOpen();
-    }
+    // public EventResDto(Event event, int manApply, int womanApply) {
+    //     this.eventId = event.getEventId();
+    //     this.eventName = event.getEventName();
+    //     this.startDate = event.getStartDate();
+    //     this.endDate = event.getEndDate();
+    //     this.createAt = event.getCreateAt();
+    //     this.manApply = manApply;
+    //     this.womanApply = womanApply;
+    //     this.maxApply = event.getMaxApply();
+    //     this.open = event.isOpen();
+    // }
 }

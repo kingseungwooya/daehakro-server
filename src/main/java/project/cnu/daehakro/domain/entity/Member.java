@@ -2,9 +2,9 @@ package project.cnu.daehakro.domain.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.cnu.daehakro.domain.enums.MemberSex;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
