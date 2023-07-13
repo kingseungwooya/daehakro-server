@@ -13,6 +13,7 @@ import project.cnu.daehakro.domain.entity.ChatRoom;
 import project.cnu.daehakro.domain.entity.Event;
 import project.cnu.daehakro.domain.entity.Member;
 import project.cnu.daehakro.domain.entity.UnivInfo;
+import project.cnu.daehakro.domain.enums.EventType;
 import project.cnu.daehakro.domain.enums.ResponseEnum;
 import project.cnu.daehakro.domain.handler.CustomApiException;
 
@@ -44,6 +45,7 @@ public class AdminServiceImpl implements AdminService {
         if (!isEnd(event.getEndDate())) {
             throw new CustomApiException(ResponseEnum.EVENT_NOT_ENDED);
         }
+
         // refactoring 필요 임시코드
         List<Member> mens = event.getMembersOfMan();
         List<Member> womens = event.getMembersOfWomen();
@@ -64,6 +66,14 @@ public class AdminServiceImpl implements AdminService {
         if (womens.size() < mens.size()) {
             // 쿠폰 보상
         }
+
+    }
+
+    private void matchONE_ONE() {
+
+    }
+
+    private void matchTWO_TWO() {
 
     }
 
@@ -98,6 +108,7 @@ public class AdminServiceImpl implements AdminService {
                 .startDate(eventDto.getStartDate())
                 .endDate(eventDto.getEndDate())
                 .univInfo(univInfo)
+                .eventType(eventDto.getEventType())
                 .build();
         eventRepository.save(event);
     }
@@ -120,6 +131,7 @@ public class AdminServiceImpl implements AdminService {
                                 .open(e.isOpen())
                                 .manApply(e.getMembersOfMan().size())
                                 .womanApply(e.getMembersOfWomen().size())
+                                .eventType(e.getEventType().name())
                                 .build())
                 .collect(Collectors.toList());
     }

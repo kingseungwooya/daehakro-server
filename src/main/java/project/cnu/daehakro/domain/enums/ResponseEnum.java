@@ -15,8 +15,12 @@ public enum ResponseEnum {
 
     UNIV_NOT_EXIST(400, "요청하신 ID의 대학정보가 없습니다."),
 
-    EVENT_NOT_EXIST(400, "해당 event를 찾을 수 없습니다."),
-    EVENT_NOT_ENDED(403, "해당 event의 마감기한이 끝나지 않았습니다."),
+    EVENT_NOT_EXIST(400, "해당 EVENT를 찾을 수 없습니다."),
+    EVENT_NOT_ENDED(403, "해당 EVENT의 마감기한이 끝나지 않았습니다."),
+    EVENT_MATCH_FAIL(403, "신청자 수가 적어 matching 과정 중 오류 발생"),
+    EVENT_MATCH_FULL(403, "신청인원이 마감되었습니다."),
+    EVENT_APPLICANTS_NUM_FAIL(403, "해당 EVENT의 참여 인원과 신청 인원이 불일치합니다."),
+    EVENT_APPLICANT_FORM_FAIL(403, "동성끼리만 신청이 가능합니다."),
 
     USER_USERNAME_CK_SUCCESS(200, "사용가능한 아이디입니다."),
     USER_USERNAME_CK_FAIL(500, "사융할 수 없는 아이디입니다."),

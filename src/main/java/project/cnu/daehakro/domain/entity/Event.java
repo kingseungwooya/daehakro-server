@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
-import project.cnu.daehakro.domain.chat.repository.MemberRepository;
+import project.cnu.daehakro.domain.enums.EventType;
+import project.cnu.daehakro.domain.enums.MemberSex;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -41,7 +42,6 @@ public class Event {
 
     @Column(name = "open_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isOpen;
-    // 이벤트 홍보 페이지도 하나씩 넣으면 좋을듯? 사진느낌으로
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "univ_id")
@@ -54,8 +54,11 @@ public class Event {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "eventId")
     private List<Member> membersOfMan = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private EventType eventType;
+
     @Builder
-    public Event(String eventName, LocalDate startDate, LocalDate endDate, int maxApply, UnivInfo univInfo) {
+    public Event(String eventName, LocalDate startDate, LocalDate endDate, int maxApply, UnivInfo univInfo, EventType eventType) {
         this.eventName = eventName;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -63,6 +66,7 @@ public class Event {
         // 생성 즉시 open 할 것인가?
         this.isOpen = true;
         this.univInfo = univInfo;
+        this.eventType = eventType;
     }
 
     public void close() {
@@ -75,5 +79,15 @@ public class Event {
         } else {
             membersOfWomen.add(member);
         }
+    }
+
+    public boolean isFull(MemberSex sex) {
+        if(sex.equals(MemberSex.MAN)) {
+            return membersOfMan.size() == maxApply;
+        }
+        if(sex.equals(MemberSex.WOMAN)) {
+            return membersOfWomen.size() == maxApply;
+        }
+        return false;
     }
 }
