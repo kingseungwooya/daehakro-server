@@ -13,6 +13,8 @@ public interface AdminService {
 
     void randomMatch(Long eventId);
 
+    void randomTeamMatch(Long eventId);
+
     void createEvent(EventDto eventDto);
 
     List<EventResDto> getAllEvents();

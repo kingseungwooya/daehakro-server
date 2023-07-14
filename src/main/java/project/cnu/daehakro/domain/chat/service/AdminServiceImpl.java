@@ -5,20 +5,16 @@ import org.springframework.stereotype.Service;
 import project.cnu.daehakro.domain.chat.dto.EventDto;
 import project.cnu.daehakro.domain.chat.dto.EventResDto;
 import project.cnu.daehakro.domain.chat.dto.UnivInfoDto;
-import project.cnu.daehakro.domain.chat.repository.ChatRoomRepository;
-import project.cnu.daehakro.domain.chat.repository.EventRepository;
-import project.cnu.daehakro.domain.chat.repository.MemberRepository;
-import project.cnu.daehakro.domain.chat.repository.UnivRepository;
-import project.cnu.daehakro.domain.entity.ChatRoom;
-import project.cnu.daehakro.domain.entity.Event;
-import project.cnu.daehakro.domain.entity.Member;
-import project.cnu.daehakro.domain.entity.UnivInfo;
+import project.cnu.daehakro.domain.chat.repository.*;
+import project.cnu.daehakro.domain.chat.service.matcher.EventMatcher;
+import project.cnu.daehakro.domain.entity.*;
 import project.cnu.daehakro.domain.enums.EventType;
 import project.cnu.daehakro.domain.enums.ResponseEnum;
 import project.cnu.daehakro.domain.handler.CustomApiException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,10 +24,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
+    private final static String DEFAULT_ROOM_TITLE = "좋은 사람, 좋은 시간, 좋은대화";
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UnivRepository univRepository;
     private final EventRepository eventRepository;
+    private final TeamEventRepository teamEventRepository;
 
 
     /**
@@ -45,35 +43,46 @@ public class AdminServiceImpl implements AdminService {
         if (!isEnd(event.getEndDate())) {
             throw new CustomApiException(ResponseEnum.EVENT_NOT_ENDED);
         }
+        EventMatcher<Member> memberEventMatcher = new EventMatcher<>(event.getMembersOfMan(), event.getMembersOfWomen());
+        List<List<Member>> selectedCouples = memberEventMatcher.getSelectedCouples();
 
-        // refactoring 필요 임시코드
-        List<Member> mens = event.getMembersOfMan();
-        List<Member> womens = event.getMembersOfWomen();
-        int numOfCreate = Math.min(mens.size(), womens.size());
-        Collections.shuffle(mens);
-        Collections.shuffle(womens);
-        for (int i = 0; i < numOfCreate; i++) {
-            ChatRoom room = ChatRoom.builder()
-                    .title("좋은 시간, 좋은 사람, 좋은 대화")
+        for(List<Member> couple : selectedCouples) {
+            ChatRoom chatRoom = ChatRoom.builder()
+                    .members(couple)
+                    .title(DEFAULT_ROOM_TITLE)
                     .build();
-            room.join(mens.get(i));
-            room.join(womens.get(i));
-            chatRoomRepository.save(room);
-        }
-        if (mens.size() > womens.size()) {
-            // 쿠폰 보상
-        }
-        if (womens.size() < mens.size()) {
-            // 쿠폰 보상
+            couple.stream()
+                    .forEach(Member::match);
+            chatRoomRepository.save(chatRoom);
         }
 
     }
 
-    private void matchONE_ONE() {
 
-    }
+    @Override
+    public void randomTeamMatch(Long eventId) {
+        TeamEvent teamEvent = teamEventRepository.findById(eventId).orElseThrow(
+                () -> new CustomApiException(ResponseEnum.EVENT_NOT_EXIST)
+        );
+        if (!isEnd(teamEvent.getEndDate())) {
+            throw new CustomApiException(ResponseEnum.EVENT_NOT_ENDED);
+        }
+        EventMatcher<Team> memberEventMatcher = new EventMatcher<>(teamEvent.getManTeams(), teamEvent.getWomenTeams());
+        List<List<Team>> selectedCouples = memberEventMatcher.getSelectedCouples();
 
-    private void matchTWO_TWO() {
+        for(List<Team> coupleTeam : selectedCouples) {
+            List<Member> members = new ArrayList<>();
+            coupleTeam.stream().map(
+                    t -> members.addAll(t.getMembers())
+            );
+            ChatRoom chatRoom = ChatRoom.builder()
+                    .members(members)
+                    .title(DEFAULT_ROOM_TITLE)
+                    .build();
+            members.stream()
+                    .forEach(Member::match);
+            chatRoomRepository.save(chatRoom);
+        }
 
     }
 
@@ -137,7 +146,4 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    private void createChatRoom() {
-
-    }
 }

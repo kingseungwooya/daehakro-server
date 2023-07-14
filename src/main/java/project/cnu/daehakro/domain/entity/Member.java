@@ -1,5 +1,6 @@
 package project.cnu.daehakro.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.cnu.daehakro.domain.enums.MemberSex;
@@ -24,6 +25,9 @@ public class Member {
     private MemberSex sex;
 
     private int coin;
+    // 현재 이벤트에 참여중인 멤버인지.. 초기값은 항상 false여야한다.
+    @Column(name = "match_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
+    private boolean isMatch;
 
     @Column(name = "certify_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isCertify;
@@ -36,5 +40,27 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "univ_id")
     private UnivInfo univInfo;
+
+    @Builder
+    public Member(String memberId, String memberName, int age, MemberSex sex, int coin, boolean isCertify, ChatRoom chatRoom, UnivInfo univInfo) {
+        this.memberId = memberId;
+        this.memberName = memberName;
+        this.age = age;
+        this.sex = sex;
+        this.coin = coin;
+        this.isMatch = false;
+        this.isCertify = isCertify;
+        this.chatRoom = chatRoom;
+        this.univInfo = univInfo;
+    }
+
+    public void match() {
+        this.isMatch = true;
+        useCoin();
+    }
+
+    public void useCoin() {
+        this.coin = coin - 1;
+    }
 
 }
