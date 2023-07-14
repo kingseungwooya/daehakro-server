@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import project.cnu.daehakro.domain.chat.dto.TeamApplyForm;
 import project.cnu.daehakro.domain.enums.EventType;
 import project.cnu.daehakro.domain.enums.MemberSex;
 
@@ -48,10 +49,10 @@ public class Event {
     private UnivInfo univInfo;
 
     // 하나의 event 당 신청자들의 정보를 갖고있는다.
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "eventId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
     private List<Member> membersOfWomen = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "eventId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
     private List<Member> membersOfMan = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
