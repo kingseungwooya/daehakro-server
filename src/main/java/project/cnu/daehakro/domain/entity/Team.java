@@ -17,6 +17,8 @@ public class Team {
     @Column(name = "team_id")
     private Long teamId;
 
+    private String applicantId;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
     private List<Member> members = new ArrayList<>();
 
@@ -29,10 +31,11 @@ public class Team {
     private String teamName;
 
     @Builder
-    public Team(List<Member> members, MemberSex teamSex, TeamEvent event, String teamName) {
+    public Team(List<Member> members, MemberSex teamSex, TeamEvent event, String teamName, String applicantId) {
         this.members = members;
         this.teamSex = teamSex;
         this.event = event;
         this.teamName = teamName;
+        this.applicantId = applicantId;
     }
 }

@@ -18,4 +18,6 @@ public class TeamApplyForm {
 
     private String teamName;
 
+    private String applicant;
+
 }
