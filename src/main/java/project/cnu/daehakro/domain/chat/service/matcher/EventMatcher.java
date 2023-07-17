@@ -26,8 +26,8 @@ public class EventMatcher <T>{
             final List<T> women
     ) {
         int maxNum = Math.min(men.size(), women.size());
-        List<Integer> selectedMenIndex = Randoms.pickUniqueNumbersInRange(START_NUMBER, mens.size() - 1, maxNum);
-        List<Integer> selectedWomenIndex = Randoms.pickUniqueNumbersInRange(START_NUMBER, womens.size() - 1, maxNum);
+        List<Integer> selectedMenIndex = Randoms.pickUniqueNumbersInRange(START_NUMBER, men.size() - 1, maxNum);
+        List<Integer> selectedWomenIndex = Randoms.pickUniqueNumbersInRange(START_NUMBER, women.size() - 1, maxNum);
 
         List<List<T>> selectedCouples = new ArrayList<>();
 
