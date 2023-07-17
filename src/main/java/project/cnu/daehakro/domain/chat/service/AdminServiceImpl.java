@@ -7,6 +7,7 @@ import project.cnu.daehakro.domain.chat.dto.EventResDto;
 import project.cnu.daehakro.domain.chat.dto.UnivInfoDto;
 import project.cnu.daehakro.domain.chat.repository.*;
 import project.cnu.daehakro.domain.chat.service.matcher.EventMatcher;
+import project.cnu.daehakro.domain.chat.service.matcher.OneToOneEventMatcher;
 import project.cnu.daehakro.domain.entity.*;
 import project.cnu.daehakro.domain.enums.EventType;
 import project.cnu.daehakro.domain.enums.ResponseEnum;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -30,6 +32,8 @@ public class AdminServiceImpl implements AdminService {
     private final UnivRepository univRepository;
     private final EventRepository eventRepository;
     private final TeamEventRepository teamEventRepository;
+    private final EventLogRepository eventLogRepository;
+    private final TeamRepository teamRepository;
 
 
     /**
@@ -43,16 +47,21 @@ public class AdminServiceImpl implements AdminService {
         if (!isEnd(event.getEndDate())) {
             throw new CustomApiException(ResponseEnum.EVENT_NOT_ENDED);
         }
-        EventMatcher<Member> memberEventMatcher = new EventMatcher<>(event.getMembersOfMan(), event.getMembersOfWomen());
+        OneToOneEventMatcher memberEventMatcher = new OneToOneEventMatcher(event.getMembersOfMan(), event.getMembersOfWomen());
         List<List<Member>> selectedCouples = memberEventMatcher.getSelectedCouples();
 
         for(List<Member> couple : selectedCouples) {
             ChatRoom chatRoom = ChatRoom.builder()
                     .members(couple)
                     .title(DEFAULT_ROOM_TITLE)
+                    .eventId(eventId)
                     .build();
-            couple.stream()
-                    .forEach(Member::match);
+
+            couple.stream().forEach(Member::useCoin);
+            couple.stream().forEach(
+                    s -> eventLogRepository.findByMemberAndEventId(s, eventId).match()
+            );
+
             chatRoomRepository.save(chatRoom);
         }
 
@@ -75,12 +84,22 @@ public class AdminServiceImpl implements AdminService {
             coupleTeam.stream().map(
                     t -> members.addAll(t.getMembers())
             );
+            // 신청 대표 팀 코인 사용
+            coupleTeam.stream()
+                    .forEach(
+                            s -> memberRepository.findById(s.getApplicantId()).get().useTeamCoin()
+                    );
+
             ChatRoom chatRoom = ChatRoom.builder()
                     .members(members)
                     .title(DEFAULT_ROOM_TITLE)
+                    .eventId(eventId)
                     .build();
             members.stream()
-                    .forEach(Member::match);
+                    .forEach(Member::useTeamCoin);
+            members.stream().forEach(
+                    s -> eventLogRepository.findByMemberAndEventId(s, eventId).match()
+            );
             chatRoomRepository.save(chatRoom);
         }
 
@@ -100,6 +119,23 @@ public class AdminServiceImpl implements AdminService {
                 () -> new CustomApiException(ResponseEnum.EVENT_NOT_EXIST)
         );
         event.close();
+        // eventLog도 모두 isClose로 바꿔줄것
+        List<EventLog> logs = eventLogRepository.findByEventId(eventId);
+        logs.stream().forEach(EventLog::close);
+        chatRoomRepository.deleteAllByEventId(eventId);
+
+    }
+    @Override
+    public void closeTeamEvent(Long eventId) {
+        TeamEvent event = teamEventRepository.findById(eventId).orElseThrow(
+                () -> new CustomApiException(ResponseEnum.EVENT_NOT_EXIST)
+        );
+        event.close();
+        // eventLog도 모두 isClose로 바꿔줄것
+        List<EventLog> logs = eventLogRepository.findByEventId(eventId);
+        logs.stream().forEach(EventLog::close);
+        chatRoomRepository.deleteAllByEventId(eventId);
+        teamRepository.deleteAllByEvent(event);
     }
 
 

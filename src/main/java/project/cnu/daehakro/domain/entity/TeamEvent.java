@@ -68,14 +68,18 @@ public class TeamEvent {
     }
 
     public void applyTeam(Team team) {
-
+        if (team.getTeamSex().equals(MemberSex.MAN)) {
+            manTeams.add(team);
+        } else {
+            womenTeams.add(team);
+        }
     }
 
     public boolean isFull(MemberSex sex) {
-        if(sex.equals(MemberSex.MAN)) {
+        if (sex.equals(MemberSex.MAN)) {
             return manTeams.size() == maxApply;
         }
-        if(sex.equals(MemberSex.WOMAN)) {
+        if (sex.equals(MemberSex.WOMAN)) {
             return womenTeams.size() == maxApply;
         }
         return false;

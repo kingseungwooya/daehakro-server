@@ -16,6 +16,7 @@ public enum ResponseEnum {
     UNIV_NOT_EXIST(400, "요청하신 ID의 대학정보가 없습니다."),
 
     EVENT_NOT_EXIST(400, "해당 EVENT를 찾을 수 없습니다."),
+    EVENT_APPLICANT_ALREADY_EXIST(400, "이미 이벤트에 참여중입니다." ),
     EVENT_NOT_ENDED(403, "해당 EVENT의 마감기한이 끝나지 않았습니다."),
     EVENT_MATCH_FAIL(403, "신청자 수가 적어 matching 과정 중 오류 발생"),
     EVENT_MATCH_FULL(403, "신청인원이 마감되었습니다."),
@@ -30,6 +31,7 @@ public enum ResponseEnum {
 
     USER_MY_INFO_SUCCESS(200,"조회 성공"),
     USER_NOT_FOUND(401,"회원이 존재하지 않습니다"),
+    COIN_DOES_NOT_EXIST(500,"이벤트에 신청하려면 코인이 1개 이상 있어야 합니다."),
 
 
     CHAT_ROOM_MAKE_SUCCESS(200, "생성 성공"),

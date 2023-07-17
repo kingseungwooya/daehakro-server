@@ -23,12 +23,14 @@ public class ChatRoom {
     @Column(name = "room_id")
     private Long roomId;
 
+    private Long eventId;
+
     private String title;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom")
     private List<Member> members = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<ChatMessage> messages = new ArrayList<>();
 
     @CreationTimestamp

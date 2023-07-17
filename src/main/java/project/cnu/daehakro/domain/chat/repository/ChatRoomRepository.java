@@ -8,5 +8,5 @@ import project.cnu.daehakro.domain.entity.ChatRoom;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-
+    void deleteAllByEventId(Long eventId);
 }

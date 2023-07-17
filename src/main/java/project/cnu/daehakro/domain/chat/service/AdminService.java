@@ -21,4 +21,6 @@ public interface AdminService {
 
     void closeEvent(Long eventId);
 
+    void closeTeamEvent(Long eventId);
+
 }
