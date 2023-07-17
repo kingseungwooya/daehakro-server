@@ -3,9 +3,12 @@ package project.cnu.daehakro.domain.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.cnu.daehakro.domain.enums.Department;
 import project.cnu.daehakro.domain.enums.MemberSex;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,9 +28,8 @@ public class Member {
     private MemberSex sex;
 
     private int coin;
-    // 현재 이벤트에 참여중인 멤버인지.. 초기값은 항상 false여야한다.
-    @Column(name = "match_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
-    private boolean isMatch;
+
+    private int teamCoin;
 
     @Column(name = "certify_flag", nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean isCertify;
@@ -41,26 +43,57 @@ public class Member {
     @JoinColumn(name = "univ_id")
     private UnivInfo univInfo;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL)
+    List<EventLog> eventLogs = new ArrayList<>();
+
+
     @Builder
-    public Member(String memberId, String memberName, int age, MemberSex sex, int coin, boolean isCertify, ChatRoom chatRoom, UnivInfo univInfo) {
+    public Member(String memberId, String memberName, int age, MemberSex sex, ChatRoom chatRoom, UnivInfo univInfo, Department department) {
         this.memberId = memberId;
         this.memberName = memberName;
         this.age = age;
         this.sex = sex;
-        this.coin = coin;
-        this.isMatch = false;
-        this.isCertify = isCertify;
+        this.coin = 0;
+        this.isCertify = false;
         this.chatRoom = chatRoom;
         this.univInfo = univInfo;
+        this.teamCoin = 0;
+        this.department = department;
+        // this.haveEvent = false;
     }
 
-    public void match() {
-        this.isMatch = true;
-        useCoin();
+    @Enumerated(EnumType.STRING)
+    private Department department;
+
+
+    public void applyEvent(Long eventId) {
+        EventLog eventLog = EventLog.builder()
+                .member(this)
+                .eventId(eventId)
+                .build();
+        this.eventLogs.add(eventLog);
+
+    }
+
+    public void useTeamCoin() {
+        this.teamCoin = teamCoin - 1;
     }
 
     public void useCoin() {
         this.coin = coin - 1;
+    }
+
+    public boolean haveCoin() {
+        if (this.coin > 0) {
+            return true;
+        }
+        return false;
+    }
+    public boolean haveTeamCoin() {
+        if (this.teamCoin > 0) {
+            return true;
+        }
+        return false;
     }
 
 }
