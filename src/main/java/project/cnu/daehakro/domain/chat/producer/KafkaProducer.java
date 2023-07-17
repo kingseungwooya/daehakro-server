@@ -43,7 +43,7 @@ public class KafkaProducer {
         ListenableFuture<SendResult<String, ChatMessageDto>> future = kafkaTemplate.send(
                 new ProducerRecord<String, ChatMessageDto>(topicName, Long.toString(message.getRoomId()), message)  // custom partitioner 이용을 위한..
         );
-);// 메시지를 kafka broker 에게 전송한다 . step1
+// 메시지를 kafka broker 에게 전송한다 . step1
 
         future.addCallback(success -> {
             LOGGER.info("[성공이닷] offset: {}, partition: {}",

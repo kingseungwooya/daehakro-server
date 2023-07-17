@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 알고리즘 고도화 필요..
@@ -67,6 +68,21 @@ public class OneToOneEventMatcher{
 
         return selectedCouples;
     }
+    private List<List<Member>> makeCouples(
+            final List<Member> mens,
+            final List<Member> womens
+    ) {
+        List<List<Member>> selectedCouples = mens.stream()
+                .flatMap(man -> womens.stream()
+                        .filter(woman -> !man.getDepartment().equals(woman.getDepartment()))
+                        .findFirst()
+                        .map(woman -> List.of(man, woman))
+                        .stream())
+                .collect(Collectors.toList());
+
+        return selectedCouples;
+    }
+
 
 
 
