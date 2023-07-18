@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @RequiredArgsConstructor
+@Table(name = "event_log")
 public class EventLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

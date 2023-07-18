@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @Getter
 public class OneToOneEventMatcher{
 
-    private static final int START_NUMBER = 0;
+   // private static final int START_NUMBER = 0;
     private List<List<Member>> selectedCouples;
 
-    public OneToOneEventMatcher(final List<Member> mens, final List<Member> womens) {
-        this.selectedCouples = makeCouple(mens, womens);
+    public OneToOneEventMatcher(final List<Member> mens, final List<Member> women) {
+        this.selectedCouples = makeCouple(mens, women);
     }
 
     // private List<List<Member>> makeCouple(
@@ -45,42 +45,19 @@ public class OneToOneEventMatcher{
     //     }
     //     return selectedCouples;
     // }
+
     private List<List<Member>> makeCouple(
-            final List<Member> mens,
+            final List<Member> men,
             final List<Member> women
     ) {
-        List<List<Member>> selectedCouples = new ArrayList<>();
-        Set<Member> matchedMen = new HashSet<>();
-        Set<Member> matchedWomen = new HashSet<>();
 
-        for (Member woman : women) {
-            for (Member man : mens) {
-                if (!man.getDepartment().equals(woman.getDepartment())
-                        && !matchedMen.contains(man))
-                {
-                    selectedCouples.add(List.of(man, woman));
-                    matchedMen.add(man);
-                    matchedWomen.add(woman);
-                    break;
-                }
-            }
-        }
-
-        return selectedCouples;
-    }
-    private List<List<Member>> makeCouples(
-            final List<Member> mens,
-            final List<Member> womens
-    ) {
-        List<List<Member>> selectedCouples = mens.stream()
-                .flatMap(man -> womens.stream()
+        return men.stream()
+                .flatMap(man -> women.stream()
                         .filter(woman -> !man.getDepartment().equals(woman.getDepartment()))
                         .findFirst()
                         .map(woman -> List.of(man, woman))
                         .stream())
                 .collect(Collectors.toList());
-
-        return selectedCouples;
     }
 
 

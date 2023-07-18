@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Getter
-@Builder
 public class EventResDto {
 
     private final long eventId;
@@ -36,7 +35,7 @@ public class EventResDto {
     private final String eventType;
 
     @Builder
-    public EventResDto(int eventId, String eventName, LocalDate startDate, LocalDate endDate, Timestamp createAt, int manApply, int womanApply, int maxApply, boolean open, EventType eventType) {
+    public EventResDto(Long eventId, String eventName, LocalDate startDate, LocalDate endDate, Timestamp createAt, int manApply, int womanApply, int maxApply, boolean open, EventType eventType) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.startDate = startDate;

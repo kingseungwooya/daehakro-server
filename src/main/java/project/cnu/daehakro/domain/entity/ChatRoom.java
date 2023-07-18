@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "chat_room")
 public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class ChatRoom {
 
     private String title;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom")
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Member> members = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom", cascade = CascadeType.ALL)
@@ -37,6 +37,13 @@ public class ChatRoom {
     @Column(name = "create_at", nullable = false)
     private Timestamp createAt;
 
+    @Builder
+    public ChatRoom(Long eventId, String title, List<Member> members, List<ChatMessage> messages) {
+        this.eventId = eventId;
+        this.title = title;
+        this.members = members;
+        this.messages = messages;
+    }
 
     public void join(Member member) {
         members.add(member);

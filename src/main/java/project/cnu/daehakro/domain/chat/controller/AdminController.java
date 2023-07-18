@@ -38,7 +38,12 @@ public class AdminController {
 
     @PostMapping("/matching")
     public ResponseEntity<?> matching(@RequestParam Long eventId) {
-        chatRoomService.matching(eventId);
+        adminService.randomMatch(eventId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping("/team-matching")
+    public ResponseEntity<?> teamMatching(@RequestParam Long eventId) {
+        adminService.randomTeamMatch(eventId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -38,7 +38,7 @@ public class MessageListener {
         logger.info("Chat room id: " + message.getRoomId());
         logger.info("Timestamp: " + message.getCreateAt());
         // listen 되자마자 디비로 바로 insert 박아주기
-        // chatService.sendMessage(message);
+        chatService.sendMessage(message);
 
         // 추후 여러 학교로 확장시 학교마다 topic을 만드는게 좋을듯..
         template.convertAndSend("/topic/group/", message);

@@ -15,6 +15,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     public void createChatRoom(String key) {
         // sorting 알고리즘.. 어케할건데..
+        // random sorting
+
         chatRoomRepository.deleteAll();
         // 1단계 관리자 확인 인증
     }

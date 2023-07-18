@@ -8,4 +8,5 @@ public interface ChatRoomService {
     void createChatRoom(String key);
 
     void deleteRooms(String key);
+
 }
