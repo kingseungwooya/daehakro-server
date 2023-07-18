@@ -5,13 +5,13 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jpa:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
       hibernate:
-        ddl-auto: create
-      properties:
-        hibernate:
-          format_sql: false
-          show-sql: true
+        format_sql: true
+        show-sql: true
 
 
   kafka:
@@ -30,3 +30,4 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer  # ? ?????? ??
     template:
       default-topic: kafka-demo  # Kafka ???? ?? ?? ??
+
