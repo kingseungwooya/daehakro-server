@@ -176,7 +176,7 @@ public class AdminServiceImpl implements AdminService {
                                 .open(e.isOpen())
                                 .manApply(e.getMembersOfMan().size())
                                 .womanApply(e.getMembersOfWomen().size())
-                                .eventType(e.getEventType().name())
+                                .eventType(e.getEventType())
                                 .build())
                 .collect(Collectors.toList());
     }

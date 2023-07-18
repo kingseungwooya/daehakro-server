@@ -19,7 +19,7 @@ public class Team {
 
     private String applicantId;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Member> members = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

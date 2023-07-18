@@ -49,10 +49,10 @@ public class Event {
     private UnivInfo univInfo;
 
     // 하나의 event 당 신청자들의 정보를 갖고있는다.
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Member> membersOfWomen = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Member> membersOfMan = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

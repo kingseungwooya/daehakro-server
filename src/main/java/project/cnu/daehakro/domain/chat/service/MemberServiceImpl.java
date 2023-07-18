@@ -74,7 +74,7 @@ public class MemberServiceImpl implements MemberService {
     private boolean isDuplicateApply(Member member, Long eventId) {
         if (
                 eventLogRepository.existsByEventIdAndMember(eventId, member) ||
-                        eventLogRepository.existsByMemberAndClose(member, false)
+                        eventLogRepository.existsByMemberAndIsClose(member, false)
         ) {
             return true;
         }

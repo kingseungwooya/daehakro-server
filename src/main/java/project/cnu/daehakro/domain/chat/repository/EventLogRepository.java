@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface EventLogRepository extends JpaRepository<EventLog, Long> {
     boolean existsByEventIdAndMember(Long eventId, Member member);
-    boolean existsByMemberAndClose(Member member, boolean isClose);
+    boolean existsByMemberAndIsClose(Member member, boolean isClose);
 
     EventLog findByMemberAndEventId(Member member, Long eventId);
 
