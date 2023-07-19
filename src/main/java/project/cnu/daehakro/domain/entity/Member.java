@@ -53,7 +53,7 @@ public class Member {
         this.memberName = memberName;
         this.age = age;
         this.sex = sex;
-        this.coin = 0;
+        this.coin = 1;
         this.isCertify = false;
         this.chatRoom = chatRoom;
         this.univInfo = univInfo;
@@ -66,13 +66,8 @@ public class Member {
     private Department department;
 
 
-    public void applyEvent(Long eventId) {
-        EventLog eventLog = EventLog.builder()
-                .member(this)
-                .eventId(eventId)
-                .build();
+    public void applyEvent(EventLog eventLog) {
         this.eventLogs.add(eventLog);
-
     }
 
     public void useTeamCoin() {

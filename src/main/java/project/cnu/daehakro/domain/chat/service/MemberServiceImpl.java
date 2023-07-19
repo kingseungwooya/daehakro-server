@@ -6,10 +6,7 @@ import org.springframework.stereotype.Service;
 import project.cnu.daehakro.domain.chat.dto.MemberApplyForm;
 import project.cnu.daehakro.domain.chat.dto.TeamApplyForm;
 import project.cnu.daehakro.domain.chat.repository.*;
-import project.cnu.daehakro.domain.entity.Event;
-import project.cnu.daehakro.domain.entity.Member;
-import project.cnu.daehakro.domain.entity.Team;
-import project.cnu.daehakro.domain.entity.TeamEvent;
+import project.cnu.daehakro.domain.entity.*;
 import project.cnu.daehakro.domain.enums.MemberSex;
 import project.cnu.daehakro.domain.enums.ResponseEnum;
 import project.cnu.daehakro.domain.handler.CustomApiException;
@@ -66,7 +63,13 @@ public class MemberServiceImpl implements MemberService {
             throw new CustomApiException(ResponseEnum.EVENT_MATCH_FULL);
         }
 
-        member.applyEvent(event.getEventId());
+
+        EventLog eventLog = EventLog.builder()
+                .member(member)
+                .eventId(event.getEventId())
+                .build();
+        eventLogRepository.save(eventLog);
+        member.applyEvent(eventLog);
         event.apply(member);
 
     }
@@ -124,7 +127,12 @@ public class MemberServiceImpl implements MemberService {
         }
         // member들 이벤트 신청 현황 등록
         for (Member member : members) {
-            member.applyEvent(event.getEventId());
+            EventLog eventLog = EventLog.builder()
+                    .member(member)
+                    .eventId(event.getEventId())
+                    .build();
+            eventLogRepository.save(eventLog);
+            member.applyEvent(eventLog);
         }
 
         Team team = Team.builder()
