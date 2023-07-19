@@ -1,6 +1,8 @@
 package project.cnu.daehakro.domain.chat.service;
 
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import project.cnu.daehakro.domain.chat.dto.EventDto;
 import project.cnu.daehakro.domain.chat.dto.EventResDto;
@@ -26,6 +28,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
+    private final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
     private final static String DEFAULT_ROOM_TITLE = "좋은 사람, 좋은 시간, 좋은대화";
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -34,6 +37,7 @@ public class AdminServiceImpl implements AdminService {
     private final TeamEventRepository teamEventRepository;
     private final EventLogRepository eventLogRepository;
     private final TeamRepository teamRepository;
+    private final ExcludedDepartmentRepository excludedDepartmentRepository;
 
 
     /**
@@ -47,7 +51,9 @@ public class AdminServiceImpl implements AdminService {
         if (!isEnd(event.getEndDate())) {
             throw new CustomApiException(ResponseEnum.EVENT_NOT_ENDED);
         }
-        OneToOneEventMatcher memberEventMatcher = new OneToOneEventMatcher(event.getMembersOfMan(), event.getMembersOfWomen());
+        OneToOneEventMatcher memberEventMatcher =
+                new OneToOneEventMatcher(event.getMembersOfMan(),
+                        event.getMembersOfWomen());
         List<List<Member>> selectedCouples = memberEventMatcher.getSelectedCouples();
 
         for(List<Member> couple : selectedCouples) {
@@ -58,6 +64,8 @@ public class AdminServiceImpl implements AdminService {
                     .build();
 
             couple.stream().forEach(Member::useCoin);
+            logger.info(" couple  생성 완료!!");
+
             couple.stream().forEach(
                     s -> eventLogRepository.findByMemberAndEventId(s, eventId).match()
             );
@@ -123,6 +131,8 @@ public class AdminServiceImpl implements AdminService {
         List<EventLog> logs = eventLogRepository.findByEventId(eventId);
         logs.stream().forEach(EventLog::close);
         chatRoomRepository.deleteAllByEventId(eventId);
+        // 이벤트마다 ban 할 department를 정하기에 이것도 모두 제거
+        excludedDepartmentRepository.deleteAllByEventId(eventId);
 
     }
     @Override

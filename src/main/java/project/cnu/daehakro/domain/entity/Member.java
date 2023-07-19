@@ -45,6 +45,9 @@ public class Member {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL)
     List<EventLog> eventLogs = new ArrayList<>();
+    // ExcludedDepartment 객체는 event 종료시 모두 사라진다. 그에 맞게 Persist로 변경하여 save 시 영속성 보장을 해주고 orphanRemoval을 통해 delete시 같이 제거되도록 한다
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member",cascade = CascadeType.PERSIST, orphanRemoval = true)
+    List<ExcludedDepartment> excludedDepartments = new ArrayList<>();
 
 
     @Builder
@@ -89,6 +92,10 @@ public class Member {
             return true;
         }
         return false;
+    }
+
+    public void addExcDepartment(ExcludedDepartment excludedDepartment) {
+        this.excludedDepartments.add(excludedDepartment);
     }
 
 }

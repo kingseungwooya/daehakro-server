@@ -7,6 +7,7 @@ import project.cnu.daehakro.domain.chat.dto.MemberApplyForm;
 import project.cnu.daehakro.domain.chat.dto.TeamApplyForm;
 import project.cnu.daehakro.domain.chat.repository.*;
 import project.cnu.daehakro.domain.entity.*;
+import project.cnu.daehakro.domain.enums.Department;
 import project.cnu.daehakro.domain.enums.MemberSex;
 import project.cnu.daehakro.domain.enums.ResponseEnum;
 import project.cnu.daehakro.domain.handler.CustomApiException;
@@ -23,6 +24,7 @@ public class MemberServiceImpl implements MemberService {
     private final TeamEventRepository teamEventRepository;
     private final TeamRepository teamRepository;
     private final EventLogRepository eventLogRepository;
+    private final ExcludedDepartmentRepository excludedDepartmentRepository;
 
     /**
      * 검증필요
@@ -63,15 +65,26 @@ public class MemberServiceImpl implements MemberService {
             throw new CustomApiException(ResponseEnum.EVENT_MATCH_FULL);
         }
 
-
+        // 신청 로그 저장
         EventLog eventLog = EventLog.builder()
                 .member(member)
                 .eventId(event.getEventId())
                 .build();
         eventLogRepository.save(eventLog);
+        // member 필드에 eventLog 저장
         member.applyEvent(eventLog);
-        event.apply(member);
 
+        // 제외할 과 저장
+        for (Department department : applyForm.getExcludeDepartments()) {
+            member.addExcDepartment(excludedDepartmentRepository.save(
+                    ExcludedDepartment.builder()
+                            .eventId(event.getEventId())
+                            .member(member)
+                            .excDepartment(department)
+                            .build()));
+        }
+        // event 추가 알아서 save 일어남
+        event.apply(member);
     }
 
     private boolean isDuplicateApply(Member member, Long eventId) {

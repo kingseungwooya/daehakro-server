@@ -1,6 +1,7 @@
 package project.cnu.daehakro.domain.chat.service.matcher;
 
 import lombok.Getter;
+import project.cnu.daehakro.domain.entity.ExcludedDepartment;
 import project.cnu.daehakro.domain.entity.Member;
 
 import java.util.*;
@@ -10,12 +11,15 @@ import java.util.stream.Collectors;
  * 알고리즘 고도화 필요..
  */
 @Getter
-public class OneToOneEventMatcher{
+public class OneToOneEventMatcher {
 
     private static final int START_NUMBER = 0;
+    private static final int MAX_LOOP_COUNT = 10000;
     private List<List<Member>> selectedCouples;
 
-    public OneToOneEventMatcher(final List<Member> mens, final List<Member> women) {
+    public OneToOneEventMatcher(
+            final List<Member> mens,
+            final List<Member> women) {
         this.selectedCouples = makeCouple(mens, women);
     }
 
@@ -68,8 +72,10 @@ public class OneToOneEventMatcher{
         List<Member> availableMens = new ArrayList<>(mens);
         List<Member> availableWomen = new ArrayList<>(women);
         List<List<Member>> selectedCouples = new ArrayList<>();
-
+        int loopCount = 0;
         while (!availableMens.isEmpty() || !availableWomen.isEmpty()) {
+            loopCount++;
+
             // 남자 리스트에서 랜덤하게 한 명 뽑기
             int randomManIndex = new Random().nextInt(availableMens.size());
             Member man = availableMens.get(randomManIndex);
@@ -78,8 +84,22 @@ public class OneToOneEventMatcher{
             int randomWomanIndex = new Random().nextInt(availableWomen.size());
             Member woman = availableWomen.get(randomWomanIndex);
 
-            // 같은 과에 속하는지 확인
-            if (man.getDepartment().equals(woman.getDepartment())) {
+            // 제외를 원하는 과에 포함되어 있는가
+            // 같은 과에 속하는지 확인 -> 함수로 빼내야함 추후에..
+            if (man.getDepartment().equals(woman.getDepartment()) ||
+                    man.getExcludedDepartments().stream()
+                            .anyMatch(
+                                    d -> d.getExcDepartment().equals(woman.getDepartment())
+                            ) ||
+                    woman.getExcludedDepartments().stream()
+                            .anyMatch(
+                                    d -> d.getExcDepartment().equals(man.getDepartment())
+                            )
+            ) {
+                // 무한루프 방지용 추후 수정 필요
+                if (loopCount > MAX_LOOP_COUNT) {
+                    break;
+                }
                 // 모든 학생들이 같은 과에 속한 경우 루프를 종료
                 boolean allInSameDepartment = availableMens.stream()
                         .allMatch(m -> m.getDepartment().equals(man.getDepartment()))
@@ -123,7 +143,6 @@ public class OneToOneEventMatcher{
     //}
 //
 //
-
 
 
 }
