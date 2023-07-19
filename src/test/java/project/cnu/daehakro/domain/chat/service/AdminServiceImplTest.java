@@ -160,14 +160,14 @@ class AdminServiceImplTest {
 
         memberRepository.saveAll(List.of(man1, man2, man3, man4, woman1, woman2, woman3, woman4));
 
-        memberService.applyEvent(new MemberApplyForm(man1.getMemberId(), eventId));
-        memberService.applyEvent(new MemberApplyForm(man2.getMemberId(), eventId));
-        memberService.applyEvent(new MemberApplyForm(man3.getMemberId(), eventId));
-        memberService.applyEvent(new MemberApplyForm(man4.getMemberId(), eventId));
-        memberService.applyEvent(new MemberApplyForm(woman1.getMemberId(), eventId));
-        memberService.applyEvent(new MemberApplyForm(woman2.getMemberId(), eventId));
-        memberService.applyEvent(new MemberApplyForm(woman3.getMemberId(), eventId));
-        memberService.applyEvent(new MemberApplyForm(woman4.getMemberId(), eventId));
+        memberService.applyEvent(new MemberApplyForm(man1.getMemberId(), eventId, List.of(Department.NAOE))); // 얘는 매칭되는게 없어야한다.
+        memberService.applyEvent(new MemberApplyForm(man2.getMemberId(), eventId, List.of(Department.DEFAULT)));
+        memberService.applyEvent(new MemberApplyForm(man3.getMemberId(), eventId, List.of(Department.DEFAULT)));
+        memberService.applyEvent(new MemberApplyForm(man4.getMemberId(), eventId, List.of(Department.DEFAULT)));
+        memberService.applyEvent(new MemberApplyForm(woman1.getMemberId(), eventId, List.of(Department.DEFAULT)));
+        memberService.applyEvent(new MemberApplyForm(woman2.getMemberId(), eventId, List.of(Department.DEFAULT)));
+        memberService.applyEvent(new MemberApplyForm(woman3.getMemberId(), eventId, List.of(Department.DEFAULT)));
+        memberService.applyEvent(new MemberApplyForm(woman4.getMemberId(), eventId, List.of(Department.DEFAULT)));
 
         adminService.randomMatch(targetEvent.getEventId());
 
@@ -189,9 +189,6 @@ class AdminServiceImplTest {
 
     }
 
-    @Test
-    void randomMatch() {
-    }
 
     @Test
     void randomTeamMatch() {
