@@ -10,6 +10,7 @@ import project.cnu.daehakro.domain.chat.dto.UnivInfoDto;
 import project.cnu.daehakro.domain.chat.repository.*;
 import project.cnu.daehakro.domain.chat.service.matcher.EventMatcher;
 import project.cnu.daehakro.domain.chat.service.matcher.OneToOneEventMatcher;
+import project.cnu.daehakro.domain.chat.service.matcher.TeamEventMatcher;
 import project.cnu.daehakro.domain.entity.*;
 import project.cnu.daehakro.domain.enums.EventType;
 import project.cnu.daehakro.domain.enums.ResponseEnum;
@@ -84,8 +85,8 @@ public class AdminServiceImpl implements AdminService {
         if (!isEnd(teamEvent.getEndDate())) {
             throw new CustomApiException(ResponseEnum.EVENT_NOT_ENDED);
         }
-        EventMatcher<Team> memberEventMatcher = new EventMatcher<>(teamEvent.getManTeams(), teamEvent.getWomenTeams());
-        List<List<Team>> selectedCouples = memberEventMatcher.getSelectedCouples();
+        TeamEventMatcher memberEventMatcher = new TeamEventMatcher(teamEvent.getManTeams(), teamEvent.getWomenTeams());
+        List<List<Team>> selectedCouples = memberEventMatcher.getSelectedTeams();
 
         for(List<Team> coupleTeam : selectedCouples) {
             List<Member> members = new ArrayList<>();
