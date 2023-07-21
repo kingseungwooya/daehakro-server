@@ -3,14 +3,14 @@ package project.cnu.daehakro.domain.chat.service.matcher;
 import lombok.Getter;
 import project.cnu.daehakro.domain.entity.Member;
 import project.cnu.daehakro.domain.entity.Team;
-import project.cnu.daehakro.domain.enums.EventType;
+
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 
-import static project.cnu.daehakro.domain.chat.service.matcher.Randoms.shuffle;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 
 @Getter
 public class TeamEventMatcher {
@@ -37,36 +37,62 @@ public class TeamEventMatcher {
             loopCount++;
 
             // 남자 리스트에서 랜덤하게 한 팀 뽑기
+            System.out.println("------------size");
+            System.out.println(availableMenTeams.size());
+            System.out.println(availableWomenTeams.size());
+
             int randomManIndex = new Random().nextInt(availableMenTeams.size());
             Team manTeam = availableMenTeams.get(randomManIndex);
             Member applicantOfMan = manTeam.getMembers().stream().
                     filter(m -> m.getMemberId() == manTeam.getApplicantId())
                     .findFirst().get();
+            System.out.println("men index  -------" + randomManIndex);
+            System.out.println("men applicant  -------" + applicantOfMan.getMemberId());
 
             // 여자 리스트에서 랜덤하게 한 팀 뽑기
             int randomWomanIndex = new Random().nextInt(availableWomenTeams.size());
+
             Team womanTeam = availableWomenTeams.get(randomWomanIndex);
             Member applicantOfWoman = womanTeam.getMembers().stream().
                     filter(m -> m.getMemberId() == womanTeam.getApplicantId())
                     .findFirst().get();
-            if (
-                    applicantOfMan.getExcludedDepartments().stream()
+            System.out.println("women index  -------" + randomWomanIndex);
+            System.out.println("men applicant  -------" + applicantOfWoman.getMemberId());
+            System.out.println(manTeam.getExcludedDepartments().size());
+            System.out.println(womanTeam.getExcludedDepartments().size());
+            System.out.println((manTeam.getExcludedDepartments().stream()
+                    .anyMatch(d -> womanTeam.getMembers().stream()
                             .anyMatch(
-                                    d -> d.getExcDepartment().equals(applicantOfWoman.getDepartment())
-                            ) ||
-                            applicantOfWoman.getExcludedDepartments().stream()
-                            .anyMatch(
-                                    d -> d.getExcDepartment().equals(applicantOfMan.getDepartment())
+                                    m -> m.getDepartment().equals(d.getExcDepartment())
                             )
+                    )
+            ));
+            if ((womanTeam.getExcludedDepartments().stream()
+                    .anyMatch(d -> manTeam.getMembers().stream()
+                            .anyMatch(
+                                    m -> m.getDepartment().equals(d.getExcDepartment())
+                            )
+                    )
+            ) ||
+                    (manTeam.getExcludedDepartments().stream()
+                            .anyMatch(d -> womanTeam.getMembers().stream()
+                                    .anyMatch(
+                                            m -> m.getDepartment().equals(d.getExcDepartment())
+                                    )
+                            )
+                    )
+
             ) {
+                System.out.println("매칭실패");
                 // 무한루프 방지용 추후 수정 필요
                 if (loopCount > MAX_LOOP_COUNT) {
+                    System.out.println("-------------------------------------------------max loop");
                     break;
                 }
 
-                // 같은 과라면 다시 랜덤 매칭 수행
                 continue;
             }
+
 
             // 매칭된 커플을 결과 리스트에 추가하고, 뽑힌 인덱스는 제거
             selectedCouples.add(List.of(manTeam, womanTeam));

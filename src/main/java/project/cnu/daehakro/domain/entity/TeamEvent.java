@@ -70,6 +70,7 @@ public class TeamEvent {
 
     public void applyTeam(Team team) {
         if (team.getTeamSex().equals(MemberSex.MAN)) {
+            System.out.println("남자 신청이요~~~~~~~");
             manTeams.add(team);
         } else {
             womenTeams.add(team);

@@ -30,6 +30,9 @@ public class Team {
 
     private String teamName;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member",cascade = CascadeType.PERSIST, orphanRemoval = true)
+    List<ExcludedDepartment> excludedDepartments = new ArrayList<>();
+
     @Builder
     public Team(List<Member> members, MemberSex teamSex, TeamEvent event, String teamName, String applicantId) {
         this.members = members;
@@ -37,5 +40,8 @@ public class Team {
         this.event = event;
         this.teamName = teamName;
         this.applicantId = applicantId;
+    }
+    public void addExcDepartment(ExcludedDepartment excludedDepartment) {
+        this.excludedDepartments.add(excludedDepartment);
     }
 }

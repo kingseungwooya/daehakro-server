@@ -60,7 +60,7 @@ public class Member {
         this.isCertify = false;
         this.chatRoom = chatRoom;
         this.univInfo = univInfo;
-        this.teamCoin = 0;
+        this.teamCoin = 1;
         this.department = department;
         // this.haveEvent = false;
     }

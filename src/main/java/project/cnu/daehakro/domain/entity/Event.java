@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import project.cnu.daehakro.domain.enums.Department;
 import project.cnu.daehakro.domain.enums.EventType;
 import project.cnu.daehakro.domain.enums.MemberSex;
 

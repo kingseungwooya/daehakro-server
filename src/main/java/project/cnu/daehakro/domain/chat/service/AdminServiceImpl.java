@@ -104,8 +104,7 @@ public class AdminServiceImpl implements AdminService {
                     .title(DEFAULT_ROOM_TITLE)
                     .eventId(eventId)
                     .build();
-            members.stream()
-                    .forEach(Member::useTeamCoin);
+
             members.stream().forEach(
                     s -> eventLogRepository.findByMemberAndEventId(s, eventId).match()
             );

@@ -148,14 +148,6 @@ public class MemberServiceImpl implements MemberService {
             member.applyEvent(eventLog);
         }
         // excluded 설정 대표만 설정한다. 굳이 나머지 팀원들도 할 필요는 없다.
-        for (Department department : applyForm.getExcludeDepartments()) {
-            applicant.addExcDepartment(excludedDepartmentRepository.save(
-                    ExcludedDepartment.builder()
-                            .eventId(event.getEventId())
-                            .member(applicant)
-                            .excDepartment(department)
-                            .build()));
-        }
 
 
         Team team = Team.builder()
@@ -165,6 +157,15 @@ public class MemberServiceImpl implements MemberService {
                 .teamName(applyForm.getTeamName())
                 .applicantId(applicant.getMemberId())
                 .build();
+        for (Department department : applyForm.getExcludeDepartments()) {
+            team.addExcDepartment(excludedDepartmentRepository.save(
+                    ExcludedDepartment.builder()
+                            .eventId(event.getEventId())
+                            .member(applicant)
+                            .excDepartment(department)
+                            .build()));
+        }
+
         teamRepository.save(team);
         event.applyTeam(team);
     }
