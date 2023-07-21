@@ -2,6 +2,7 @@ package project.cnu.daehakro.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "event_log")
+@Getter
 public class EventLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
